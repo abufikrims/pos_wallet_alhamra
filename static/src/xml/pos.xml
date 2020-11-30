@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<templates id="pos_wallet_odoo_template" inherit_id="point_of_sale.template" xml:space="preserve">
+
+		<!-- ClientDetails -->
+		<t t-extend="ClientDetails">
+			<t t-jquery=".client-details-right" t-operation="append">
+				<div class="client-detail">
+					<span class='label'>Wallet Balance</span>
+					<span id="wallet_bal"> <t t-esc='partner.wallet_balance'/></span>
+				</div>
+			</t>
+
+
+			<t t-jquery=".edit-buttons" t-operation="before">
+				<div class='edit-buttons'>
+					<div class='button pos-wallet' id="pos-wallet" style="background-color: #7F82AC; margin-right: 50px; color: #fff; padding: 10px 10px; font-size: 20px;">
+					  <i class='fa fa-google-wallet'/>  Wallet Recharge
+					</div>
+				</div>
+			</t>
+						
+		</t>
+
+
+		<!-- ActionpadWidget -->
+		<t t-extend="ActionpadWidget">
+			<t t-jquery=".actionpad" t-operation="replace">
+				
+				<div class="actionpad">
+					<button t-attf-class='button set-customer #{ ( widget.pos.get_client() and widget.pos.get_client().name.length > 10) ? "decentered" : "" }' >
+						<i class='fa fa-user' /> 
+						<t t-if="widget.pos.get_client()">
+							<t t-esc="widget.pos.get_client().name" />
+							<span id="partner_wallet"><t t-esc="(widget.pos.get_client() ? ' [Wallet: ' + (Math.round(widget.pos.get_client().wallet_balance)) + ']': '')"/></span>
+						</t>
+						<t t-if="!widget.pos.get_client()">
+							Customer
+						</t>
+					</button>
+					<button class='button pay'>
+						<div class='pay-circle'>
+							<i class='fa fa-chevron-right' /> 
+						</div>
+						Payment
+					</button>
+				</div>
+			</t>
+		</t>
+		
+		<!-- PaymentScreenWidget -->
+		<t t-extend="PaymentScreenWidget">
+			<t t-jquery=".js_set_customer" t-operation="append">
+				 <!-- <t t-if="widget.pos.get_client()"> -->
+					<span id="payment_wallet"></span>
+				<!-- </t> -->
+			</t>
+		</t>
+
+		<!-- ClientListScreenWidget -->
+		<t t-extend="ClientListScreenWidget">
+
+			<!-- -->
+			<t t-jquery="tr" t-operation="append">
+				<th>Wallet Balance</th>
+			</t>
+
+		</t>
+
+	  <!-- ClientLineWidget -->
+		<t t-extend="ClientLine">
+			<t t-jquery="tr.client-line" t-operation="append">
+				<td id="bal"><t t-esc='partner.wallet_balance or "N/A"' /></td>
+			</t>
+		</t>		   
+
+		
+			
+		<!-- PosWalletPopupWidget -->
+		<t t-name="PosWalletPopupWidget">
+			<div class="modal-dialog">
+				<div class="popup popup-confirm" style="height: 300px !important;">
+					<p class="title" style="background-color: rgb(110,200,155); color: #fff;">Wallet Recharge</p>
+					<!--<p class="body" style="color: #0075AC;">Your Wallet Balance is: <t t-esc="widget.options.partner" /></p>-->
+					
+						<p>
+						 <label> Payment Journal:  </label>
+						 <select id="payment_type" class='detail' name='type' style="height: 50px; width: 250px;">
+											<option value='cash'>Cash</option>
+											<option value='check'>Cheque</option>
+											<option value='bank'>Bank/Card</option>
+										</select>
+						</p>
+						<p>
+						 <label> Amount:  </label><input id ="wallet_amount" type="text" class="input-field" name="wallet" style="height: 35px; width: 60%;"></input>
+						 </p>
+						 
+
+					 
+					<div class="footer" style="background-color: rgb(110,200,155); color: #fff;">
+						<div class="button cancel" style="background-color: #0075AC; color: #fff;">
+							Cancel 
+						</div>
+						<div class="button confirm" id="add_wallet_money" style="background-color: #0075AC; color: #fff;">
+							Add Money 
+						</div>
+					</div>
+				</div>
+			</div>
+		</t>
+		
+		<t t-extend="PosTicket">
+			
+			<t t-jquery="table[class*='receipt-change']" t-operation="after">
+
+				<br />
+				<!-- <table class='receipt-change'>
+					<tr>
+						<t t-set="current_wallet" t-value="0"/>
+						<t t-foreach="paymentlines" t-as="line1">
+							  <t t-if="line1.cashregister.journal.wallet == true">
+								  <t t-set="current_wallet" t-value="(order.get_client().wallet_balance - line1.get_amount())"/>
+							  </t>
+						</t>
+						
+						<t t-if='order.get_client()'>
+							<td>Wallet Balance: </td>
+							<td class="pos-right-align">
+								<t t-esc='widget.format_currency(current_wallet)'/>
+							</td>
+						</t>
+					</tr>
+				</table> -->
+				<table class='receipt-change'>
+					<tr>
+						<t t-set="flag" t-value="0"/>
+						<t t-set="current_wallet" t-value="0"/>
+						<t t-set="amount_new" t-value="0"/>
+						<t t-foreach="paymentlines" t-as="line1">
+						  	<t t-if="line1.cashregister.journal.wallet == true">
+								<t t-set="flag" t-value="1"/>
+								<t t-set="amount_new" t-value="amount_new + line1.get_amount()"/>
+						  	</t>
+						</t>
+						<t t-if="flag &gt;0">
+							<t t-set="current_wallet" t-value="(order.get_client().wallet_balance - amount_new)"/>
+						</t>
+						<t t-if="flag == 0">
+							<t t-set="current_wallet" t-value="(order.get_client().wallet_balance)"/>
+						</t>
+						
+						<t t-if='order.get_client()'>
+							<td>Wallet Balance: </td>
+							<td class="pos-right-align">
+								<t t-esc='widget.format_currency(current_wallet)'/>
+							</td>
+						</t>
+					</tr>
+				</table>
+
+
+			</t>
+	   
+		</t> 
+	 
+	
+	</templates>
+	
+	

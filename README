@@ -1,0 +1,18 @@
+
+Version 12.0.0.1:
+	- Made wallet Balance readonly
+Version 12.0.0.2:
+	- Update wallet balance view and aadd wallet balance in receipt.
+Version 12.0.0.3:
+	- Update wallet balance immediately.
+Version 12.0.0.4:
+		- Update wallet balance in receipt.
+
+Version 12.0.0.5
+-----------------
+ Index improved according new format
+
+
+version 12.0.0.6:(date 20/02/2020)
+- payment_refer field not user , remove it.
+- if pos order payment not pay by wallet , but its automatically generate debit wallet transaction.
