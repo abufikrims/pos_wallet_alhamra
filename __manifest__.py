@@ -2,12 +2,12 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 {
-    "name" : "POS Customer Wallet Management in Odoo",
+    "name" : "POS Customer Wallet Alhamra",
     "version" : "12.0.0.6",
     "category" : "Point of Sale",
     "depends" : ['base','sale','account','point_of_sale'],
     "author": "BrowseInfo",
-    'summary': 'This apps helps manage customer wallet and allow recharge wallet for the customer',
+    'summary': 'This apps helps manage customer wallet and allow recharge wallet for the customer for ALHAMRA',
     "description": """
     
     Purpose :- 
