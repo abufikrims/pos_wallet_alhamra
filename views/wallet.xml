@@ -135,9 +135,9 @@
 		<field name="arch" type="xml">
 		    <!-- <xpath expr="//page[@name='sales_purchases']/group"> -->
 		    
-			<xpath expr="//field[@name='va_saku']" position="after">
+			<xpath expr="//page[@name='siswa']/group[2]" position="after">
 
-		        <group string="Wallet Balance" name="wallet_balance">
+		        <group string="Wallet Balance" name="wallet_balance" col="4" colspan="4">
 		            <field name="wallet_balance" readonly="1"/>
 
                     <div>
