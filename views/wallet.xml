@@ -133,7 +133,8 @@
 		<field name="model">res.partner</field>
 		<field name="inherit_id" ref="base.view_partner_form"/>
 		<field name="arch" type="xml">
-		    <xpath expr="//page[@name='sales_purchases']/group">
+		    <!-- <xpath expr="//page[@name='sales_purchases']/group"> -->
+		    <xpath expr="//page[@name='siswa']/group">
 		        <group string="Wallet Balance" name="wallet_balance">
 		            <field name="wallet_balance" readonly="1"/>
 
