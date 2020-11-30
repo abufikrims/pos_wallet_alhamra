@@ -11,13 +11,13 @@
 			</t>
 
 
-			<t t-jquery=".edit-buttons" t-operation="before">
+			<!-- <t t-jquery=".edit-buttons" t-operation="before">
 				<div class='edit-buttons'>
 					<div class='button pos-wallet' id="pos-wallet" style="background-color: #7F82AC; margin-right: 50px; color: #fff; padding: 10px 10px; font-size: 20px;">
 					  <i class='fa fa-google-wallet'/>  Wallet Recharge
 					</div>
 				</div>
-			</t>
+			</t> -->
 						
 		</t>
 
