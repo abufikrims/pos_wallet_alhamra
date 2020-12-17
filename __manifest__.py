@@ -107,6 +107,7 @@ This Module allow the seller to recharge wallet for the customer.
     "data": ['security/ir.model.access.csv',
         'views/custom_pos_view.xml',
         'views/wallet.xml',
+        'views/wallet_transaction.xml',
     ],
     'qweb': [
         'static/src/xml/pos.xml',
