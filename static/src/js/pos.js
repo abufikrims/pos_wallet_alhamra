@@ -1,6 +1,6 @@
 // pos_wallet_odoo js
 //console.log("custom callleddddddddddddddddddddd")
-odoo.define('pos_wallet_odoo.pos', function(require) {
+odoo.define('pos_wallet_alhamra.pos', function(require) {
     "use strict";
 
     var models = require('point_of_sale.models');

@@ -5,7 +5,7 @@
 		<!-- Add custom js for pos_wallet_odoo -->	    
         <template id="assets_for_pos_wallet_odoo" inherit_id="point_of_sale.assets">
             <xpath expr="." position="inside">
-                <script type="text/javascript" src="/pos_wallet_odoo/static/src/js/pos.js"/>
+                <script type="text/javascript" src="/pos_wallet_alhamra/static/src/js/pos.js"/>
             </xpath>
         </template>
     

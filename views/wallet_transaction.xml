@@ -13,7 +13,7 @@
                     <field name="partner_id"/>
                     <field name="pos_order_id"/>
                     <field name="reference"/>
-                    <field name="amount"/>
+                    <field name="amount" sum="Total Transaksi"/>
                     <field name="status"/>
                 </tree>
             </field>
@@ -41,13 +41,26 @@
             </field>
         </record>
 
+        <!-- musyrif.wallet search view -->
+        <record id="musyrif_wallet_transaction_view_search" model="ir.ui.view">
+            <field name="name">musyrif.wallet.view.search</field>
+            <field name="model">pos.wallet.transaction</field>
+            <field name="arch" type="xml">
+                <search string="Search Description">
+                    <!-- Add your fields here -->
+                    <field name="partner_id"/>
+                    <field name="reference"/>
+                </search>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="action_musyrif_wallet">
 			<field name="name">Transaksi Wallet Musyrif</field>
 			<field name="res_model">pos.wallet.transaction</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <!-- <field name="context">{'search_default_state_approved': 1}</field> -->
-			<!-- <field name="search_view_id" ref="alhamra_kesantrian.view_satpam_chekout_search"/> -->
+			<field name="search_view_id" ref="pos_wallet_alhamra.musyrif_wallet_transaction_view_search"/>
 		</record>
 
         <!-- Definisikan Tree View dan Form View Khusus untuk action_satpam_form -->
