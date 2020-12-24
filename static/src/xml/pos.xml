@@ -5,14 +5,14 @@
 		<t t-extend="ClientDetails">
 			<t t-jquery=".client-details-right" t-operation="append">
 				<div class="client-detail">
-					<span class='label'>Wallet Balance</span>
+					<span class='label'>Saldo Wallet</span>
 					<span id="wallet_bal"> <t t-esc='partner.wallet_balance'/></span>
 				</div>
 			</t>
 
 
-			<!-- Revisi by Imam - hilangkan tombol Recharge di POS
-			<t t-jquery=".edit-buttons" t-operation="before">
+			<!-- Revisi by Imam - hilangkan tombol Recharge di POS -->
+			<!-- <t t-jquery=".edit-buttons" t-operation="before">
 				<div class='edit-buttons'>
 					<div class='button pos-wallet' id="pos-wallet" style="background-color: #7F82AC; margin-right: 50px; color: #fff; padding: 10px 10px; font-size: 20px;">
 					  <i class='fa fa-google-wallet'/>  Wallet Recharge
@@ -62,7 +62,7 @@
 
 			<!-- -->
 			<t t-jquery="tr" t-operation="append">
-				<th>Wallet Balance</th>
+				<th>Saldo</th>
 			</t>
 
 		</t>
