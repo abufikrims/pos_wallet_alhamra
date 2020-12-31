@@ -104,6 +104,8 @@ class pos_wallet_transaction(models.Model):
         ('pos_order', 'POS Order')
         ], string='Reference', default='manual')
     amount = fields.Char('Amount')
+    amount_trx = fields.Integer(string='Nilai Trx')
+    
     currency_id = fields.Many2one('res.currency', 'Currency')
     status = fields.Selection([
         ('draft', 'Draft'),
@@ -138,6 +140,7 @@ class pos_order(models.Model):
                     'pos_order_id' : order_id,
                     'reference' : 'pos_order',
                     'amount' : amount,
+                    'amount_trx' : amount,
                     'currency_id' : pos_order_id.pricelist_id.currency_id.id,
                     'status': 'done'
                 }
@@ -182,6 +185,7 @@ class WalletRecharge(models.TransientModel):
             'wallet_type' : 'credit',
             'reference' : 'manual',
 	        'amount' : self.recharge_amount,
+            'amount_trx' : self.recharge_amount,
 	        'partner_id': partner_wallet_id.id,
 	        'currency_id' : partner_wallet_id.property_product_pricelist.currency_id.id,
         }

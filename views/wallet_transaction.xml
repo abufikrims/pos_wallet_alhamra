@@ -13,7 +13,7 @@
                     <field name="partner_id"/>
                     <field name="pos_order_id"/>
                     <field name="reference"/>
-                    <field name="amount" sum="Total Transaksi"/>
+                    <field name="amount_trx" sum="Total Transaksi"/>
                     <field name="status"/>
                 </tree>
             </field>
@@ -33,7 +33,7 @@
                             <field name="partner_id"/>
                             <field name="pos_order_id"/>
                             <field name="reference"/>
-                            <field name="amount"/>
+                            <field name="amount_trx"/>
                             <field name="currency_id"/>
                             <field name="status"/>
                         </group>
