@@ -196,5 +196,11 @@ class WalletRecharge(models.TransientModel):
         partner_wallet_id.write({'wallet_balance': total_amount })
         
         return
+
+class product_inherit(models.Model):
+    _inherit = 'product.template'
+
+    rak = fields.Char(string='Lokasi Rak')
+
                
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:    
