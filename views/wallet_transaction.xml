@@ -51,6 +51,8 @@
             <field name="arch" type="xml">
                 <search string="Search Description">
                     <!-- Add your fields here -->
+                    <filter string="Dompet Masuk" name="filter_by_credit" domain="[('wallet_type','=','credit')]" />
+                    <filter string="Dompet Keluar" name="filter_by_debit" domain="[('wallet_type','=','debit')]" />
                     <field name="partner_id"/>
                     <field name="reference"/>
                 </search>
