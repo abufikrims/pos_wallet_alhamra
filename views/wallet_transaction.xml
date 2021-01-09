@@ -63,7 +63,7 @@
 			<field name="name">Transaksi Wallet Musyrif</field>
 			<field name="res_model">pos.wallet.transaction</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree</field>
             <!-- <field name="context">{'search_default_state_approved': 1}</field> -->
 			<field name="search_view_id" ref="pos_wallet_alhamra.musyrif_wallet_transaction_view_search"/>
 		</record>
@@ -83,7 +83,7 @@
 			<field name="act_window_id" ref="action_musyrif_wallet"/>
 		</record>
 
-        <menuitem id="menuitem_musyrif_keuangan_wallet" name="Wallet Santri" parent="alhamra_kesantrian.menuitem_musyrif_keuangan" action="action_musyrif_wallet" sequence="30"/>
+        <menuitem id="menuitem_musyrif_keuangan_wallet" name="Dompet Santri" parent="alhamra_kesantrian.menuitem_musyrif_keuangan" action="action_musyrif_wallet" sequence="30"/>
 
     </data>
 </odoo>
