@@ -76,12 +76,12 @@
 			<field name="act_window_id" ref="action_musyrif_wallet"/>
 		</record>
 
-		<record id="action_musyrif_wallet_form" model="ir.actions.act_window.view">
+		<!-- <record id="action_musyrif_wallet_form" model="ir.actions.act_window.view">
 			<field name="sequence" eval="2"/>
 			<field name="view_mode">form</field>
 			<field name="view_id" ref="musyrif_wallet_transaction_view_form"/>
 			<field name="act_window_id" ref="action_musyrif_wallet"/>
-		</record>
+		</record> -->
 
         <menuitem id="menuitem_musyrif_keuangan_wallet" name="Dompet Santri" parent="alhamra_kesantrian.menuitem_musyrif_keuangan" action="action_musyrif_wallet" sequence="30"/>
 
