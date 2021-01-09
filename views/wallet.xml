@@ -138,7 +138,7 @@
 			<xpath expr="//page[@name='siswa']/group[2]" position="after">
 
 		        <group string="Wallet Balance" name="wallet_balance" col="4" colspan="4">
-		            <field name="wallet_balance" readonly="1"/>
+		            <field name="wallet_balance" readonly="0"/>
 
                     <div>
                         <button type="action" class="btn-link"

@@ -98,6 +98,7 @@ class pos_wallet_transaction(models.Model):
         ('debit', 'Debit')
         ], string='Type', default='credit')
     partner_id = fields.Many2one('res.partner', 'Customer')
+    nis = fields.Char('NIS', related='partner_id.nis', readonly=True)
     pos_order_id = fields.Many2one('pos.order', 'POS Order')
     #wallet_id = fields.Many2one('res.partner', 'Wallet')
     reference = fields.Selection([

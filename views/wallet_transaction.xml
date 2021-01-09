@@ -10,6 +10,7 @@
                     <!-- Add your fields here -->
                     <field name="name"/>
                     <field name="wallet_type"/>
+                    <field name="nis"/>
                     <field name="partner_id"/>
                     <field name="pos_order_id"/>
                     <field name="reference"/>
