@@ -3,6 +3,7 @@
 
 from odoo import fields, models, api, _
 from datetime import date, time, datetime
+from odoo.exceptions import UserError
 
 class res_partner(models.Model):
     _inherit = 'res.partner'
@@ -159,12 +160,19 @@ class WalletRecharge(models.TransientModel):
     @api.multi
     def post(self):
         context = self._context
+        pengguna = self.env.user.display_name
+        
         active_ids = context.get('active_ids')
         account_payment_obj = self.env['account.payment']
         partner_wallet_id = self.env['res.partner'].browse(active_ids[0])
+        saldo_va_saku = partner_wallet_id.saldo_uang_saku
         wallet_transaction_obj = self.env['pos.wallet.transaction']
+        uang_saku_obj = self.env['uang.saku']
         
         date_now = datetime.strftime(datetime.now(), '%Y-%m-%d')
+
+        if self.recharge_amount > saldo_va_saku:
+            raise UserError(("Pengisian Dompet Santri melebihi saldo Uang Saku !"))
         
         vals = {}
         
@@ -194,6 +202,16 @@ class WalletRecharge(models.TransientModel):
         total_amount = partner_wallet_id.wallet_balance + self.recharge_amount
         
         partner_wallet_id.write({'wallet_balance': total_amount })
+
+        vals_uangsaku = {
+            'name' : self.env['ir.sequence'].with_context(ir_sequence_date=date_now).next_by_code('uang.saku'),
+            'siswa_id' : partner_wallet_id.id,
+            'tgl_transaksi' : datetime.now().date(),
+            'amount_out' : self.recharge_amount,
+            'keterangan' : 'Isi Dompet Santri '+pengguna
+        }
+        uang_saku_create = uang_saku_obj.sudo().create(vals_uangsaku)
+        uang_saku_create.action_confirm()
         
         return
 
