@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data >
+        <!-- Add you code here -->
+                <record id="action_view_wallet_account_musyrif" model="ir.actions.act_window">
+            <field name="name">Isi Dompet</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wallet.recharge</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_wallet_recharge_musyrif" model="ir.ui.view">
+            <field name="name">Isi Dompet Santri</field>
+            <field name="model">wallet.recharge</field>
+            <field name="arch" type="xml">
+                <form string="Wallet Recharge">
+                    <group>
+                        <group>
+                            <!--<field name="partner_id"/>-->
+                            <field name="journal_id" domain="[('type','=','bank')]" options="{'no_open':True, 'no_create_edit':True, 'no_create':True}"/>
+                            <field name="recharge_amount"/>
+                        
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="post" string="Submit" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Cek Siswa by Musyrif tree view -->
+        <record id="musyrif_cek_siswa_view_tree" model="ir.ui.view">
+            <field name="name">musyrif.cek.siswa.view.tree</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false">
+                    <!-- Add your fields here -->
+                    <field name="nis" />
+                    <field name="name"/>
+                    <field name="class_id"/>
+                    <field name="halaqoh_id"/>
+                    <field name="virtual_account"/>
+                    <field name="wallet_balance" string="Saldo Dompet"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <!-- Cek Siswa by Musyrif form view -->
+        <record id="musyrif_cek_siswa_view_form" model="ir.ui.view">
+            <field name="name">musyrif_cek_siswa.view.form</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <form string="Data Santri" duplicate="0" edit="false" create="false" delete="false">
+                    <header>
+                        <button name="%(action_view_wallet_account_musyrif)d" type="action" class="btn-primary"
+                                context="{'search_default_partner_id': active_id}"
+                                string="Isi Dompet" widget="statinfo"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </group>
+                        <group string="Data Siswa" col="4" colspan="4">
+                            <field name="street"/>
+                            <field name="street2"/>
+                            <field name="rt_rw"/>
+                            <field name="city"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="ayah"/>
+                            <field name="ayah_telp"/>
+                            <field name="ibu"/>
+                            <field name="ibu_telp"/>
+                        </group>
+                        <group string="Data Akademik" col="4" colspan="4">
+                            <field name="nis"/>
+                            <field name="class_id"/>
+                            <field name="halaqoh_id"/>
+                            <field name="virtual_account"/>
+                            <field name="va_saku"/>
+                            <field name="tahfidz_surah"/>
+                        </group>
+                        <group string="Uang Saku dan Dompet Siswa" col="4" colspan="4">
+                            <field name="saldo_uang_saku"/>
+                            <field name="wallet_balance" string="Saldo Dompet"/>
+                            <!-- <div>
+                                <button name="%(action_view_wallet_account_musyrif)d" type="action" class="btn-link"
+                                context="{'search_default_partner_id': active_id}"
+                                string="Isi Dompet" widget="statinfo"/>
+                            </div> -->
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Cek Siswa by Musyrif search view -->
+        <record id="musyrif_cek_siswa_view_search" model="ir.ui.view">
+            <field name="name">musyrif_cek_siswa.view.search</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <search string="Search Description">
+                    <!-- Add your fields here -->
+                    <field name="name"/>
+                    <field name="nis"/>
+                    
+                </search>
+            </field>
+        </record>
+
+        <!-- Cek Siswa by Musyrif action window -->
+        <record model="ir.actions.act_window" id="action_musyrif_cek_siswa">
+			<field name="name">Musyrif Cek Siswa</field>
+			<field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('halaqoh_id.ustadz_halaqoh.user_id', '=', uid)]</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="context">{'search_default_state_approved': 1}</field> -->
+			<field name="search_view_id" ref="musyrif_cek_siswa_view_search"/>
+		</record>
+
+        <!-- Definisikan Tree View dan Form View Khusus untuk action_musyrif_cek_siswa -->
+        <record id="action_musyrif_cek_siswa_tree" model="ir.actions.act_window.view">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="musyrif_cek_siswa_view_tree"/>
+			<field name="act_window_id" ref="action_musyrif_cek_siswa"/>
+		</record>
+
+		<record id="action_musyrif_cek_siswa_form" model="ir.actions.act_window.view">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="musyrif_cek_siswa_view_form"/>
+			<field name="act_window_id" ref="action_musyrif_cek_siswa"/>
+		</record>
+
+         <!-- uang.saku by Musyrif tree view -->
+        <record id="musyrif_uang_saku_view_tree" model="ir.ui.view">
+            <field name="name">musyrif.uang.saku.view.tree</field>
+            <field name="model">uang.saku</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Cek Data Siswa" create="false" delete="false">
+                    <!-- Add your fields here -->
+                    <field name="name"/>
+                    <field name="tgl_transaksi"/>
+                    <field name="siswa_id"/>
+                    <field name="no_va_saku"/>
+                    <field name="amount_in" sum="Total Masuk"/>
+                    <field name="amount_out" sum="Total Keluar"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- uang.saku by Musyrif form view -->
+        <record id="musyrif_uang_saku_view_form" model="ir.ui.view">
+            <field name="name">musyrif.uang.saku.view.form</field>
+            <field name="model">uang.saku</field>
+            <field name="type">form</field>
+             <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Cek Data Siswa" create="false" edit="false" duplicate="false" delete="false">
+                    <sheet>
+                        <group>
+                            <!-- Add your fields here -->
+                            <field name="name"/>
+                            <field name="tgl_transaksi"/>
+                            <field name="siswa_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                            <field name="no_va_saku"/>
+                            <field name="amount_in"/>
+                            <field name="amount_out"/>
+                            <field name="validasi_id"/>
+                            <field name="validasi_time"/>
+                            <field name="keterangan"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- musyrif uang saku search view -->
+        <record id="musyrif_uang_saku_view_search" model="ir.ui.view">
+            <field name="name">musyrif uang saku.view.search</field>
+            <field name="model">uang.saku</field>
+            <field name="arch" type="xml">
+                <search string="Search Description">
+                    <!-- Add your fields here -->
+                    <filter string="Transaksi Hari ini" name="filter_by_tgl_trx" 
+                        domain="[('tgl_transaksi','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('tgl_transaksi','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]" />
+                    <field name="name"/>
+                    <field name="no_va_saku"/>
+                    
+                </search>
+            </field>
+        </record>
+      
+        <!-- Action Uang Saku Santri by Musyrif -->
+        <record model="ir.actions.act_window" id="action_musyrif_uang_saku">
+			<field name="name">Lihat Uang Saku</field>
+			<field name="res_model">uang.saku</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('siswa_id.halaqoh_id.ustadz_halaqoh.user_id', '=', uid)]</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="context">{'search_default_state_approved': 1}</field> -->
+			<field name="search_view_id" ref="musyrif_uang_saku_view_search"/>
+		</record>
+
+        <!-- Definisikan Tree View dan Form View Khusus untuk action_musyrif_uang_saku -->
+        <record id="action_musyrif_uang_saku_tree" model="ir.actions.act_window.view">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="musyrif_uang_saku_view_tree"/>
+			<field name="act_window_id" ref="action_musyrif_uang_saku"/>
+		</record>
+        <!-- Definisikan  Form View Khusus untuk action_musyrif_uang_saku -->
+        <record id="action_musyrif_uang_saku_form" model="ir.actions.act_window.view">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="musyrif_uang_saku_view_form"/>
+			<field name="act_window_id" ref="action_musyrif_uang_saku"/>
+		</record>
+
+        
+       <!-- Uang Saku dan Dompet Santri -->
+
+        <menuitem id="menuitem_musyrif_keuangan_cek_santri" name="Cek Santri" parent="menuitem_musyrif_keuangan" action="action_musyrif_cek_siswa" sequence="5"/>
+        <menuitem id="menuitem_musyrif_keuangan_dompet" name="Uang Saku Santri" parent="menuitem_musyrif_keuangan" action="action_musyrif_uang_saku" sequence="10"/>
+         
+    </data>
+</odoo>

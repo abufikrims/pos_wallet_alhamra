@@ -5,7 +5,7 @@
     "name" : "POS Customer Wallet Alhamra",
     "version" : "12.0.0.6",
     "category" : "Point of Sale",
-    "depends" : ['base','sale','account','point_of_sale'],
+    "depends" : ['base','sale','account','point_of_sale','alhamra_akademik','alhamra_kesantrian'],
     "author": "BrowseInfo",
     'summary': 'This apps helps manage customer wallet and allow recharge wallet for the customer for ALHAMRA',
     "description": """
@@ -108,6 +108,8 @@ This Module allow the seller to recharge wallet for the customer.
         'views/custom_pos_view.xml',
         'views/wallet.xml',
         'views/wallet_transaction.xml',
+        'views/siswa_cek_wallet.xml',
+        'views/musyrif_wallet.xml',
     ],
     'qweb': [
         'static/src/xml/pos.xml',

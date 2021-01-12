@@ -2,6 +2,7 @@
 <odoo>
     <data>
 
+	<!-- Transaksi Recharge Wallet -->
 	<record id="action_view_wallet_account" model="ir.actions.act_window">
 		<field name="name">Wallet Recharge</field>
 		<field name="type">ir.actions.act_window</field>
@@ -19,8 +20,40 @@
 				<group>
 					<group>
 						<!--<field name="partner_id"/>-->
-						<field name="journal_id"/>
+						<field name="journal_id" domain="[('type','=','bank')]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
 						<field name="recharge_amount"/>
+					
+					</group>
+				</group>
+				<footer>
+		            <button name="post" string="Submit" type="object" class="btn-primary"/>
+		            <button string="Cancel" class="btn-default" special="cancel"/>
+		        </footer>
+			</form>
+		</field>
+	</record>
+
+	<!-- Transaksi Koreksi Wallet -->
+	<record id="action_edit_wallet_account" model="ir.actions.act_window">
+		<field name="name">Wallet Correction</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">wallet.koreksi</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<record id="view_wallet_koreksi" model="ir.ui.view">
+		<field name="name">Wallet Correction</field>
+		<field name="model">wallet.koreksi</field>
+		<field name="arch" type="xml">
+			<form string="Wallet Correction">
+				<group>
+					<group>
+						<!--<field name="partner_id"/>-->
+						<field name="journal_id"/>
+						<field name="edit_amount"/>
+						<field name="keterangan"/>
 					
 					</group>
 				</group>
@@ -122,7 +155,7 @@
 
 
     <!--  Menu For Wallet -->
-    <menuitem id="menu_pos_wallet_odoo" name="Wallet Management" parent="point_of_sale.menu_point_root" sequence="99"/>
+    <menuitem id="menu_pos_wallet_odoo" name="Wallet Management" parent="point_of_sale.menu_point_root" groups="point_of_sale.group_pos_manager" sequence="99"/>
     <menuitem id="menu_pos_wallet_transaction" name="Wallet Transactions" parent="menu_pos_wallet_odoo" action="action_pos_wallet" sequence="10"/>
 
 
@@ -144,15 +177,22 @@
                         <button type="action" class="btn-link"
                             name="%(action_pos_wallet)d"
                             context="{'search_default_partner_id': active_id}">
-                            <field string="Wallet(s)" name="wallet_transaction_count" widget="statinfo"/>
+                            <field string="Wallet(s)" name="wallet_transaction_count" widget="statinfo" groups="alhamra_akademik.group_tata_usaha_manager" />
                         </button>
                     </div>
                     
                     <div>
-                        <button name="%(action_view_wallet_account)d" type="action" class="btn-link"
-                        context="{'search_default_partner_id': active_id}"
-                        string="Wallet Recharge" widget="statinfo"/>
-                    </div>
+						<div>
+							<button name="%(action_view_wallet_account)d" type="action" class="btn-link"
+							context="{'search_default_partner_id': active_id}"
+							string="Wallet Recharge" widget="statinfo" groups="alhamra_akademik.group_tata_usaha_manager"/>
+						</div>
+						<div>
+							<button name="%(action_edit_wallet_account)d" type="action" class="btn-link"
+							context="{'search_default_partner_id': active_id}"
+							string="Ubah Saldo Dompet" widget="statinfo" groups="base.group_system"/>
+						</div>
+					</div>
                         		            
 		        </group>
 		    </xpath>

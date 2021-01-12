@@ -103,7 +103,8 @@ class pos_wallet_transaction(models.Model):
     #wallet_id = fields.Many2one('res.partner', 'Wallet')
     reference = fields.Selection([
         ('manual', 'Manual'),
-        ('pos_order', 'POS Order')
+        ('pos_order', 'POS Order'),
+        ('correction','Koreksi Manual')
         ], string='Reference', default='manual')
     amount = fields.Char('Amount')
     amount_trx = fields.Integer(string='Nilai Trx')
@@ -113,6 +114,8 @@ class pos_wallet_transaction(models.Model):
         ('draft', 'Draft'),
         ('done', 'Done')
         ], string='Status', readonly=True, default='draft')
+    keterangan = fields.Char(string='Keterangan')
+    
 
             
     
@@ -156,7 +159,7 @@ class WalletRecharge(models.TransientModel):
     _name = 'wallet.recharge'
     
     recharge_amount = fields.Float('Recharge Amount',required="True")
-    journal_id = fields.Many2one('account.journal', 'Payment Journal',required="True")
+    journal_id = fields.Many2one('account.journal', 'Payment Journal', required="True")
     
     @api.multi
     def post(self):
@@ -197,6 +200,7 @@ class WalletRecharge(models.TransientModel):
             'amount_trx' : self.recharge_amount,
 	        'partner_id': partner_wallet_id.id,
 	        'currency_id' : partner_wallet_id.property_product_pricelist.currency_id.id,
+            'keterangan'  : 'Isi Dompet <- VA Uang Saku',
         }
         wallet_obj = wallet_transaction_obj.sudo().create(value)
         
@@ -215,6 +219,73 @@ class WalletRecharge(models.TransientModel):
         uang_saku_create.action_confirm()
         
         return
+
+class WalletEditSaldo(models.TransientModel):
+    _name = 'wallet.koreksi'
+    
+    edit_amount = fields.Float('Jumlah Koreksi',required="True")
+    journal_id = fields.Many2one('account.journal', 'Payment Journal',required="True")
+    keterangan = fields.Char(string='Keterangan')
+    
+    
+    @api.multi
+    def post(self):
+        context = self._context
+        pengguna = self.env.user.display_name
+        
+        active_ids = context.get('active_ids')
+        account_payment_obj = self.env['account.payment']
+        partner_wallet_id = self.env['res.partner'].browse(active_ids[0])
+        saldo_va_saku = partner_wallet_id.saldo_uang_saku
+        wallet_transaction_obj = self.env['pos.wallet.transaction']
+        
+        date_now = datetime.strftime(datetime.now(), '%Y-%m-%d')
+        
+        vals = {}
+        
+        if self.edit_amount>0:
+
+            vals = {
+                'name' : self.env['ir.sequence'].with_context(ir_sequence_date=date_now).next_by_code('account.payment.customer.invoice'),
+                'payment_type' : "inbound",
+                'amount' : self.edit_amount,
+                'communication' : "Wallet Correction",
+                'payment_date' : datetime.now().date(),
+                'journal_id' : self.journal_id.id,
+                'payment_method_id': 1,
+                'partner_type': 'customer',
+                'partner_id': partner_wallet_id.id,
+            }
+        else:
+            vals = {
+                'name' : self.env['ir.sequence'].with_context(ir_sequence_date=date_now).next_by_code('account.payment.customer.invoice'),
+                'payment_type' : "outbound",
+                'amount' : -1*(self.edit_amount),
+                'communication' : "Wallet Correction",
+                'payment_date' : datetime.now().date(),
+                'journal_id' : self.journal_id.id,
+                'payment_method_id': 1,
+                'partner_type': 'customer',
+                'partner_id': partner_wallet_id.id,
+            }
+        payment_create = account_payment_obj.sudo().create(vals)
+        payment_create.post() # Confirm Account Payment
+        value = {
+            'wallet_type' : 'credit',
+            'reference' : 'correction',
+	        'amount' : self.edit_amount,
+            'amount_trx' : self.edit_amount,
+	        'partner_id': partner_wallet_id.id,
+	        'currency_id' : partner_wallet_id.property_product_pricelist.currency_id.id,
+            'keterangan' : 'Koreksi Saldo Dompet: '+pengguna+' ['+self.keterangan+']'
+        }
+        wallet_obj = wallet_transaction_obj.sudo().create(value)
+        
+        total_amount = partner_wallet_id.wallet_balance + self.edit_amount
+        
+        partner_wallet_id.write({'wallet_balance': total_amount })
+        
+        return 
 
 class product_inherit(models.Model):
     _inherit = 'product.template'
