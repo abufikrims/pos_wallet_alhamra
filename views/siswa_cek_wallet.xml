@@ -43,7 +43,7 @@
 			<field name="name">Transaksi Wallet Siswa</field>
 			<field name="res_model">pos.wallet.transaction</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">tree,form</field>
             <!-- <field name="context">{'search_default_state_approved': 1}</field> -->
 			<field name="search_view_id" ref="pos_wallet_alhamra.siswa_cek_wallet_transaction_view_search"/>
 		</record>
@@ -133,10 +133,10 @@
 		</record>
         
 
-        <menuitem id="menubar_siswa_cek" name="Akses Santri" web_icon="pos_wallet_alhamra,static/description/user_info.png"/>
+        <menuitem id="menubar_siswa_cek" name="Akses Santri" groups="group_cek_siswa,alhamra_kesantrian.group_kesantrian_musyrif" web_icon="pos_wallet_alhamra,static/description/user_info.png"/>
 		<menuitem id="menubar_siswa_dompet" name="Dompet" parent="menubar_siswa_cek" sequence="1"/>
 		<menuitem id="menuitem_siswa_cek_trx" name="Transaksi Dompet" parent="menubar_siswa_dompet" action="action_siswa_cek_wallet" sequence="10"/>
         <menuitem id="menuitem_siswa_cek_saldo" name="Saldo Dompet" parent="menubar_siswa_dompet" action="action_siswa_saldo_wallet" sequence="20"/>
-
+        
     </data>
 </odoo>

@@ -104,7 +104,9 @@ This Module allow the seller to recharge wallet for the customer.
     "website" : "https://www.browseinfo.in",
     "price": 55,
     "currency": "EUR",
-    "data": ['security/ir.model.access.csv',
+    "data": [
+        'security/security.xml',
+        'security/ir.model.access.csv',
         'views/custom_pos_view.xml',
         'views/wallet.xml',
         'views/wallet_transaction.xml',

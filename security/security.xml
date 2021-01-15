@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="group_cek_siswa" model="res.groups">
+            <field name="name">Menu Cek Data Siswa</field>
+            <field name="implied_ids" eval="[(4, ref('alhamra_kesantrian.group_kesantrian_musyrif'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- Add you code here -->
+        <record id="pos_wallet_by_ortu" model="ir.rule">
+        <field name="name">Orang tua hanya bisa melihat data Wallet Siswa anaknya</field>
+        <field name="model_id" ref="model_pos_wallet_transaction"/>
+        <field name="groups" eval="[(4, ref('alhamra_kesantrian.group_kesantrian_ortu'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="domain_force">[('partner_id.orangtua_id.id','=',user.partner_id.id)]</field>
+    </record> 
+        
+    </data>
+</odoo>
