@@ -4,6 +4,7 @@
 from odoo import fields, models, api, _
 from datetime import date, time, datetime
 from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 class res_partner(models.Model):
     _inherit = 'res.partner'
@@ -291,6 +292,13 @@ class product_inherit(models.Model):
     _inherit = 'product.template'
 
     rak = fields.Char(string='Lokasi Rak')
+
+    @api.one
+    @api.constrains('list_price','standard_price')
+    def _constrains_cek_price(self):
+        if self.list_price<self.standard_price or self.list_price<0:
+            raise ValidationError('Harga Jual harus > Harga Beli dan Harga Jual > 0')
+        
 
                
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:    
