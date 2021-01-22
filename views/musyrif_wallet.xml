@@ -23,6 +23,9 @@
                             <field name="recharge_amount"/>
                         
                         </group>
+                        <group>
+						<field name="recharge_type" widget="radio" />
+					</group>
                     </group>
                     <footer>
                         <button name="post" string="Submit" type="object" class="btn-primary"/>

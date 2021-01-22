@@ -19,6 +19,10 @@ class res_partner(models.Model):
         for partner in self:
             partner.wallet_transaction_count = len(wallet_data)
             
+class res_company(models.Model):
+    _inherit = 'res.company'
+
+    wallet_max = fields.Float('Saldo Dompet Maksimal')
 
 class account_journal(models.Model):
     _inherit = 'account.journal'
@@ -161,6 +165,20 @@ class WalletRecharge(models.TransientModel):
     
     recharge_amount = fields.Float('Recharge Amount',required="True")
     journal_id = fields.Many2one('account.journal', 'Payment Journal', required="True")
+    recharge_type = fields.Selection(string='Recharge Type', selection=[('saldo_based', 'Isi Berdasarkan Saldo'), ('manual_based', 'Isi Dompet Manual'),], default='saldo_based')
+    
+    @api.onchange('recharge_type')
+    def onchange_recharge_type(self):
+        if self.recharge_type =='saldo_based':
+            context = self._context
+            active_ids = context.get('active_ids')
+            partner_wallet_id = self.env['res.partner'].browse(active_ids[0])
+            saldo_wallet_skrg = partner_wallet_id.wallet_balance
+            maks_saldo = self.env['res.company'].search([('id','=',1)]).wallet_max
+            self.update({'recharge_amount': maks_saldo - saldo_wallet_skrg})
+        else:
+            self.update({'recharge_amount': 0})
+
     
     @api.multi
     def post(self):
@@ -171,10 +189,21 @@ class WalletRecharge(models.TransientModel):
         account_payment_obj = self.env['account.payment']
         partner_wallet_id = self.env['res.partner'].browse(active_ids[0])
         saldo_va_saku = partner_wallet_id.saldo_uang_saku
+        #saldo_wallet_skrg = partner_wallet_id.wallet_balance
         wallet_transaction_obj = self.env['pos.wallet.transaction']
         uang_saku_obj = self.env['uang.saku']
+        #maks_saldo = self.env['res.company'].search([('id','=',1)]).wallet_max
+
+        # Jika recharge_type = saldo_based
+        #if self.recharge_type == 'saldo_based':
+        #    self.recharge_amount = maks_saldo - saldo_wallet_skrg
+
         
         date_now = datetime.strftime(datetime.now(), '%Y-%m-%d')
+
+        if self.recharge_amount <= 0:
+            raise UserError(("Pengisian Dompet Santri Tidak boleh NOL / NEGATIF !"))
+        
 
         if self.recharge_amount > saldo_va_saku:
             raise UserError(("Pengisian Dompet Santri melebihi saldo Uang Saku !"))

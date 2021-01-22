@@ -22,7 +22,9 @@
 						<!--<field name="partner_id"/>-->
 						<field name="journal_id" domain="[('type','=','bank')]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
 						<field name="recharge_amount"/>
-					
+					</group>
+					<group>
+						<field name="recharge_type" widget="radio" />
 					</group>
 				</group>
 				<footer>
@@ -221,6 +223,22 @@
 			<xpath expr="//field[@name='barcode']" position="after">
 				<!-- Add your fields here -->
 				<field name="rak" attrs="{'invisible': [('type', 'not in', 'product')]}"/>
+				
+			</xpath>
+			
+		</field>
+	</record>
+
+	<!-- res.company inherit form view -->
+	<record id="res_company_wallet_inherit_id" model="ir.ui.view">
+		<field name="name">res.company.inherit.view.form</field>
+		<field name="model">res.company</field>
+		<field name="inherit_id" ref="base.view_company_form"/>
+		<field name="arch" type="xml">
+			<!-- Tambahkan Field Saldo Wallet Maksimal -->
+			<xpath expr="//field[@name='currency_id']" position="after">
+				<!-- Add your fields here -->
+				<field name="wallet_max" widget="monetary"/>
 				
 			</xpath>
 			
