@@ -197,6 +197,9 @@
 					</div>
                         		            
 		        </group>
+				<group>
+					<field name="wallet_pin" password="True"/>
+				</group>
 		    </xpath>
 		</field>
 	</record>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
-from odoo import fields, models, api, _
+from odoo import fields, models, api,_
 from datetime import date, time, datetime
 from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
@@ -10,6 +10,8 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     wallet_balance = fields.Float('Wallet Balance')
+    # update public.res_partner set wallet_pin=to_char(birth,'ddmmyy') where student='1'
+    wallet_pin = fields.Char('PIN Dompet')
 
     wallet_transaction_count = fields.Integer(compute='_compute_wallet_transaction_count', string="Wallet")
 
@@ -18,6 +20,14 @@ class res_partner(models.Model):
         wallet_data = self.env['pos.wallet.transaction'].search([('partner_id', 'in', self.ids)])
         for partner in self:
             partner.wallet_transaction_count = len(wallet_data)
+
+    @api.constrains('wallet_pin')
+    def check_wallet_pin(self):
+        for item in str(self.wallet_pin):
+            try:
+                int(item)
+            except Exception as e:
+                raise ValidationError(_("PIN Dompet harus berupa angka 0-9"))
             
 class res_company(models.Model):
     _inherit = 'res.company'
@@ -53,6 +63,7 @@ class pos_wallet_transaction(models.Model):
             #'pos_order_id' : order_id,
             'reference' : 'manual',
             'amount' : wallet,
+            'amount_trx': wallet,
             'currency_id' : partner.property_product_pricelist.currency_id.id,
             'status': 'done'
         }
@@ -327,7 +338,57 @@ class product_inherit(models.Model):
     def _constrains_cek_price(self):
         if self.list_price<self.standard_price or self.list_price<0:
             raise ValidationError('Harga Jual harus > Harga Beli dan Harga Jual > 0')
+
+# Message Wizard
+class MessageWizard(models.TransientModel):
+    _name = 'message.wizard'
+    message = fields.Text('Pesan')
+
+    @api.multi
+    def action_ok(self):
+        """ close wizard"""
+        return {'type': 'ir.actions.act_window_close'}
+
+
+# Ubah PIN by Musyrif
+class ChangeWalletPIN(models.TransientModel):
+    _name = 'wallet.pin.change'
+    _description = 'Wizard untuk menampilkan ganti PIN wallet'
+
+    name        = fields.Many2one(comodel_name='res.partner', string='Nama Siswa')
+    new_pin     = fields.Char('PIN Baru', required="True")
+    new_pin2    = fields.Char('PIN Konfirmasi', required="True")
+
+    @api.constrains('new_pin','new_pin2')
+    def _check_pin(self):
+        if self.new_pin != self.new_pin2:
+            raise ValidationError('PIN Baru tidak sama dengan PIN Konfirmasi !')
+
+    @api.multi
+    def post(self):
+        context = self._context
         
+        active_ids = context.get('active_ids')
+        partner_obj = self.env['res.partner'].browse(active_ids[0])
+        vals = {}
+        #self.update({'name': partner_obj.name})   
+
+        if self.new_pin and self.new_pin == self.new_pin2 :
+            vals = {'wallet_pin' : self.new_pin}
+            partner_obj.write(vals)
+
+            message_id = self.env['message.wizard'].create({'message': _("Ganti PIN Dompet SUKSES ..!")})
+            return {
+                'name': _('Successfull'),
+                'type': 'ir.actions.act_window',
+                'view_mode': 'form',
+                'res_model': 'message.wizard',
+                # pass the id
+                'res_id': message_id.id,
+                'target': 'new'
+            }
+
+
 
                
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:    

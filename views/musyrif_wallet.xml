@@ -2,7 +2,56 @@
 <odoo>
     <data >
         <!-- Add you code here -->
-                <record id="action_view_wallet_account_musyrif" model="ir.actions.act_window">
+        <record id="message_wizard_form" model="ir.ui.view">
+            <field name="name">message.wizard.form</field>
+            <field name="model">message.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Message">
+                    <separator string="Message" colspan="6" />
+                    <!-- <p class="text-center"> -->
+                        <field name="message" readonly="True" colspa="4" nolabel="True" widget="html"/>
+                    <!-- </p> -->
+                    <footer>
+                        <button name="action_ok" string="Ok" type="object" default_focus="1" class="oe_highlight"/> 
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- wallet.pin.change action window -->
+        <record id="action_wallet_pin_change_musyrif" model="ir.actions.act_window">
+            <field name="name">Ganti PIN Wallet</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wallet.pin.change</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="context">{"default_name": active_id}</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- wallet.pin.change form view -->
+        <record id="view_wallet_pin_change_musyrif" model="ir.ui.view">
+            <field name="name">Ganti PIN Siswa</field>
+            <field name="model">wallet.pin.change</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <group>
+                            <!-- Add your fields here -->
+                            <field name="name" readonly="True"/>
+                            <field name="new_pin" password="True"/>
+                            <field name="new_pin2" password="True"/>
+                            
+                    </group>
+                    <footer>
+                        <button name="post" string="Submit" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_view_wallet_account_musyrif" model="ir.actions.act_window">
             <field name="name">Isi Dompet</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">wallet.recharge</field>
@@ -63,6 +112,10 @@
                         <button name="%(action_view_wallet_account_musyrif)d" type="action" class="btn-primary"
                                 context="{'search_default_partner_id': active_id}"
                                 string="Isi Dompet" widget="statinfo"/>
+
+                        <button name="%(action_wallet_pin_change_musyrif)d" type="action" class="btn-primary"
+                                context="{'search_default_partner_id': active_id}"
+                                string="Ganti PIN Wallet" widget="statinfo"/>
                     </header>
                     <sheet>
                         <group>
@@ -93,6 +146,7 @@
                         <group string="Uang Saku dan Dompet Siswa" col="4" colspan="4">
                             <field name="saldo_uang_saku"/>
                             <field name="wallet_balance" string="Saldo Dompet"/>
+                            <field name="wallet_pin" readonly="True" password="True"/>
                             <!-- <div>
                                 <button name="%(action_view_wallet_account_musyrif)d" type="action" class="btn-link"
                                 context="{'search_default_partner_id': active_id}"

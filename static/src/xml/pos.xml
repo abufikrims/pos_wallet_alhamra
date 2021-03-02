@@ -53,7 +53,9 @@
 			<t t-jquery=".js_set_customer" t-operation="append">
 				 <!-- <t t-if="widget.pos.get_client()"> -->
 					<span id="payment_wallet"></span>
+
 				<!-- </t> -->
+				<div><span id="validasi_pin"></span></div>
 			</t>
 		</t>
 
@@ -156,14 +158,52 @@
 							</td>
 						</t>
 					</tr>
+					<t t-if='order.get_client()'>
+						<tr>
+							<td>Pelanggan: </td>
+							<td class="pos-right-align">
+								<t t-esc='(order.get_client().name)' />
+							</td>
+						</tr>
+						<t t-if='order.get_client().barcode'>
+							<tr>
+								<td>ID Pelanggan:</td>
+								<td class="pos-right-align">
+									<t t-esc='(order.get_client().barcode)' />
+								</td>
+							</tr>
+							
+								
+						</t>
+						
+					</t>
 				</table>
 
 
 			</t>
 	   
 		</t> 
-	 
-	
+		<t t-name="WalletPinWidget">
+			<div class="modal-dialog">
+				<div class="popup popup-confirm">
+					<p class="title" style="background-color: rgb(110,200,155); color: #fff;">Wallet PIN</p>
+					<!-- <input class="coupon_code" type='password' t-att-value="widget.options.value || ''"></input> -->
+					
+					<p>
+						 <label> Input PIN:  </label><input id ="wallet_pin" type="password" class="input-field" name="wallet_input" style="height: 35px; width: 60%;"></input>
+						 </p>
+					<div class="footer" style="background-color: rgb(110,200,155); color: #fff;">
+						<div class="button cancel" style="background-color: #0075AC; color: #fff;">
+							Cancel 
+						</div>
+						<div class="button confirm" id="wallet_pin_confirm" style="background-color: #0075AC; color: #fff;">
+							Confirm PIN 
+						</div>
+					</div>
+				</div>
+			</div>
+    	</t>	
+
 	</templates>
 	
 	
