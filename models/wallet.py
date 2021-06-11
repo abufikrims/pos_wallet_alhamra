@@ -11,7 +11,7 @@ class res_partner(models.Model):
 
     wallet_balance = fields.Float('Wallet Balance')
     # update public.res_partner set wallet_pin=to_char(birth,'ddmmyy') where student='1'
-    wallet_pin = fields.Char('PIN Dompet')
+    wallet_pin = fields.Char('PIN Dompet', default='0')
 
     wallet_transaction_count = fields.Integer(compute='_compute_wallet_transaction_count', string="Wallet")
 
